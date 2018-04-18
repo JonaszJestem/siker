@@ -1,4 +1,4 @@
-package Siker;
+package Siker.Searchers;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,10 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OlxSearcher implements Searcher {
-    String url = "https://www.olx.pl/oferty/q-";
-    Elements offers_text, offers_thumb, offers_price;
-    Document document;
-    List<String> img_sources = new ArrayList<>();
+    private final String url = "https://www.olx.pl/oferty/q-";
+    private Elements offers_text;
+    private Elements offers_thumb;
+    private Elements offers_price;
+    private Document document;
+    private final List<String> img_sources = new ArrayList<>();
 
     @Override
     public List<Item> search(String query) {

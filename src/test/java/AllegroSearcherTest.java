@@ -1,4 +1,6 @@
 import Siker.*;
+import Siker.Searchers.AllegroSearcher;
+import Siker.Searchers.Item;
 import org.junit.Test;
 
 import java.util.ArrayList;

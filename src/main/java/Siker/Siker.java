@@ -1,11 +1,14 @@
 package Siker;
 
+import Siker.Searchers.Item;
+import Siker.Searchers.Searcher;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Siker {
-    List<Searcher> searcherList = new ArrayList<>();
-    List<Item> items = new ArrayList<>();
+    private final List<Searcher> searcherList = new ArrayList<>();
+    private final List<Item> items = new ArrayList<>();
 
     public void addSearcher(Searcher searcher) {
         searcherList.add(searcher);
@@ -19,5 +22,16 @@ public class Siker {
         }
 
         return items;
+    }
+
+    public String toJson(List<Item> items) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{[");
+        for(Item i: items) {
+            sb.append(i.toJSON());
+        }
+        sb.append("]}");
+
+        return sb.toString();
     }
 }

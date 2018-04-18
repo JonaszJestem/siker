@@ -1,3 +1,5 @@
+import Siker.Searchers.Item;
+import Siker.Searchers.OlxSearcher;
 import org.junit.Test;
 import Siker.*;
 

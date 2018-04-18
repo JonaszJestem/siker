@@ -1,4 +1,4 @@
-package Siker;
+package Siker.Searchers;
 
 import java.util.List;
 

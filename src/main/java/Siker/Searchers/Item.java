@@ -1,9 +1,9 @@
-package Siker;
+package Siker.Searchers;
 
 public class Item {
-    String title;
-    String imageSource;
-    String price;
+    private String title;
+    private String imageSource;
+    private String price;
 
     public Item(String title, String imageSource, String price) {
         this.title = title;
@@ -33,5 +33,13 @@ public class Item {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public String toJSON() {
+        return "{" +
+                " 'title': " + title + ", " +
+                " 'price': " + price + ", " +
+                " 'img': " + imageSource +
+                "}";
     }
 }
