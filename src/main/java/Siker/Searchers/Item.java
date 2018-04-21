@@ -37,9 +37,9 @@ public class Item {
 
     public String toJSON() {
         return "{" +
-                " 'title': " + title + ", " +
-                " 'price': " + price + ", " +
-                " 'img': " + imageSource +
+                " \"title\": \"" + title + "\", " +
+                " \"price\": \"" + price + "\", " +
+                " \"img\": \"" + imageSource + "\"" +
                 "}";
     }
 }

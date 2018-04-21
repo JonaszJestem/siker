@@ -1,5 +1,6 @@
 package Siker.Searchers;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -31,7 +32,7 @@ public class OlxSearcher implements Searcher {
 
             for(int i = 0; i < offers_text.size(); i++) {
                 searchResult.add(new Item(
-                        offers_text.get(i).text(),
+                        StringEscapeUtils.escapeJava(offers_text.get(i).text()),
                         img_sources.get(i),
                         offers_price.get(i).text()
                 ));

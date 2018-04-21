@@ -3,6 +3,7 @@ package SpringSiker.Controllers;
 import Siker.Searchers.Item;
 import Siker.Searchers.SprzedajemySearcher;
 import Siker.Siker;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 
 @RestController
+@CrossOrigin
 public class SprzedajemyController {
     @RequestMapping("/sprzedajemy")
     String searchQuery(@RequestParam(value = "query") String query) {

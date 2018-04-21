@@ -26,9 +26,10 @@ public class Siker {
 
     public String toJson(List<Item> items) {
         StringBuilder sb = new StringBuilder();
-        sb.append("{[");
-        for(Item i: items) {
-            sb.append(i.toJSON());
+        sb.append("{ \"offers\": [");
+        for(int i = 0; i < items.size(); i++) {
+            sb.append(items.get(i).toJSON());
+            if(i < items.size() - 1) sb.append(",");
         }
         sb.append("]}");
 
