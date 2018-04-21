@@ -16,7 +16,7 @@ public class SprzedajemySearcherTest {
 
         ArrayList<String> searchPhrases = new ArrayList<>(Arrays.asList("komputer","czesci", "telefon", "samochod", "telewizor", "ksiazka"));
 
-        for(int i = 0; i < 100; i++) {
+        for(int i = 0; i < 1; i++) {
             ArrayList<Item> items = new ArrayList<>(siker.search(searchPhrases.get(i%searchPhrases.size())));
             assertFalse(items.isEmpty());
         }
