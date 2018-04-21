@@ -18,7 +18,14 @@ public class SikerController {
 
     @RequestMapping("/search")
     public String searchQuery(@RequestParam(value = "services") String services, @RequestParam(value = "query") String query) {
-        ArrayList searchers = new ArrayList<>(Arrays.asList(services.split(",")));
+
+        ArrayList searchers = new ArrayList<>();
+        if (services.contains(",")) {
+            searchers.addAll(Arrays.asList(services.split(",")));
+        }
+        else {
+            searchers.add(services);
+        }
         Siker siker = new Siker();
         if(searchers.contains("olx")) {
             siker.addSearcher(new OlxSearcher());
