@@ -1,6 +1,7 @@
 import Siker.*;
 import Siker.Searchers.AllegroSearcher;
 import Siker.Searchers.Item;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import static org.junit.Assert.assertFalse;
 
 public class AllegroSearcherTest {
     @Test
+    @Ignore
     public void shouldReturnResultSetFromGivenSearch() {
         Siker siker = new Siker();
         siker.addSearcher(new AllegroSearcher());
