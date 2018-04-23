@@ -1,11 +1,13 @@
-package Siker;
+package com.jonaszwiacek.siker.Siker;
 
-import Siker.Searchers.Item;
-import Siker.Searchers.Searcher;
+import com.jonaszwiacek.siker.Siker.Searchers.Item;
+import com.jonaszwiacek.siker.Siker.Searchers.Searcher;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component("siker")
 public class Siker {
     private final List<Searcher> searcherList = new ArrayList<>();
     private final List<Item> items = new ArrayList<>();

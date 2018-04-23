@@ -1,8 +1,9 @@
-package SpringSiker.Controllers;
+package com.jonaszwiacek.siker.SpringSiker.Controllers;
 
-import Siker.Searchers.Item;
-import Siker.Searchers.SprzedajemySearcher;
-import Siker.Siker;
+import com.jonaszwiacek.siker.Siker.Searchers.Item;
+import com.jonaszwiacek.siker.Siker.Searchers.SprzedajemySearcher;
+import com.jonaszwiacek.siker.Siker.Siker;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,10 +14,18 @@ import java.util.ArrayList;
 @RestController
 @CrossOrigin
 public class SprzedajemyController {
+
+    private final Siker siker;
+
+    @Autowired
+    public SprzedajemyController(Siker siker, SprzedajemySearcher sprzedajemySearcher) {
+        this.siker = siker;
+        siker.addSearcher(sprzedajemySearcher);
+    }
+
+
     @RequestMapping("/sprzedajemy")
     String searchQuery(@RequestParam(value = "query") String query) {
-        Siker siker = new Siker();
-        siker.addSearcher(new SprzedajemySearcher());
         ArrayList<Item> items = new ArrayList<>(siker.search(query));
 
         return siker.toJson(items);

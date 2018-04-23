@@ -1,6 +1,6 @@
-import Siker.*;
-import Siker.Searchers.Item;
-import Siker.Searchers.SprzedajemySearcher;
+import com.jonaszwiacek.siker.Siker.*;
+import com.jonaszwiacek.siker.Siker.Searchers.Item;
+import com.jonaszwiacek.siker.Siker.Searchers.SprzedajemySearcher;
 import org.junit.Test;
 
 import java.util.ArrayList;

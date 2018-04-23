@@ -1,4 +1,4 @@
-package Siker.Searchers;
+package com.jonaszwiacek.siker.Siker.Searchers;
 
 public class Item {
     private String title;

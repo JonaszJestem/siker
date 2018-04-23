@@ -1,6 +1,6 @@
-import Siker.*;
-import Siker.Searchers.AllegroSearcher;
-import Siker.Searchers.Item;
+import com.jonaszwiacek.siker.Siker.*;
+import com.jonaszwiacek.siker.Siker.Searchers.AllegroSearcher;
+import com.jonaszwiacek.siker.Siker.Searchers.Item;
 import org.junit.Ignore;
 import org.junit.Test;
 

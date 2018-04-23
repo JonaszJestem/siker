@@ -1,4 +1,4 @@
-package Siker.Searchers;
+package com.jonaszwiacek.siker.Siker.Searchers;
 
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPConstants;

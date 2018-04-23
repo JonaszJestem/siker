@@ -1,7 +1,7 @@
-import Siker.Searchers.Item;
-import Siker.Searchers.OlxSearcher;
+import com.jonaszwiacek.siker.Siker.Searchers.Item;
+import com.jonaszwiacek.siker.Siker.Searchers.OlxSearcher;
 import org.junit.Test;
-import Siker.*;
+import com.jonaszwiacek.siker.Siker.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;

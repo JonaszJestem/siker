@@ -1,8 +1,7 @@
-import Siker.Searchers.Item;
-import Siker.Searchers.OlxSearcher;
-import Siker.Searchers.SprzedajemySearcher;
-import Siker.Siker;
-import org.junit.Ignore;
+import com.jonaszwiacek.siker.Siker.Searchers.Item;
+import com.jonaszwiacek.siker.Siker.Searchers.OlxSearcher;
+import com.jonaszwiacek.siker.Siker.Searchers.SprzedajemySearcher;
+import com.jonaszwiacek.siker.Siker.Siker;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -20,12 +19,6 @@ public class SikerTest {
 
         for(int i = 0; i < 1; i++) {
             ArrayList<Item> items = new ArrayList<>(siker.search(searchPhrases.get(i%searchPhrases.size())));
-
-            for (Item item: items
-                    ) {
-                System.out.println(item.getImageSource());
-            }
-
             assertFalse(items.isEmpty());
         }
     }
