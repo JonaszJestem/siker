@@ -40,6 +40,8 @@ public class SikerController {
         else {
             searchers.add(services);
         }
+        siker.clearSearchers();
+
         if(searchers.contains("olx")) {
             siker.addSearcher(olxSearcher);
         }
@@ -47,23 +49,6 @@ public class SikerController {
             siker.addSearcher(sprzedajemySearcher);
         }
 
-        ArrayList<Item> items = new ArrayList<>(siker.search(query));
-        return siker.toJson(items);
-    }
-
-    public OlxSearcher getOlxSearcher() {
-        return olxSearcher;
-    }
-
-    public void setOlxSearcher(OlxSearcher olxSearcher) {
-        this.olxSearcher = olxSearcher;
-    }
-
-    public SprzedajemySearcher getSprzedajemySearcher() {
-        return sprzedajemySearcher;
-    }
-
-    public void setSprzedajemySearcher(SprzedajemySearcher sprzedajemySearcher) {
-        this.sprzedajemySearcher = sprzedajemySearcher;
+        return siker.toJson(siker.search(query));
     }
 }

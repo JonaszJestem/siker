@@ -17,12 +17,12 @@ public class Siker {
     }
 
     public List<Item> search(String query) {
-        items.clear();
-
+        this.items.clear();
+        System.out.println(items.size());
         for(Searcher searcher: searcherList) {
             items.addAll(searcher.search(query));
+            System.out.println(items.size());
         }
-
         return items;
     }
 
@@ -36,5 +36,9 @@ public class Siker {
         sb.append("]}");
 
         return sb.toString();
+    }
+
+    public void clearSearchers() {
+        this.searcherList.clear();
     }
 }

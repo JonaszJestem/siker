@@ -13,18 +13,16 @@ import java.util.List;
 
 @Component("sprzedajemySearcher")
 public class SprzedajemySearcher implements Searcher {
-    private Elements offers_text;
-    private Elements offers_thumb;
-    private Elements offers_price;
-    private Document document;
+    private Elements offers_titles, offers_thumbs, offers_prices;
     private final List<String> img_sources = new ArrayList<>();
+    private final List<String> links = new ArrayList<>();
 
     @Override
     public List<Item> search(String query) {
         List<Item> searchResult = new ArrayList<>();
         try {
             String url = "https://sprzedajemy.pl/szukaj?inp_text=";
-            document = Jsoup.connect(url + query).get();
+            Document document = Jsoup.connect(url + query).get();
             Elements offers = document.select(".element");
 
             // Remove the current element from the iterator and the list.
@@ -34,17 +32,19 @@ public class SprzedajemySearcher implements Searcher {
                 return price.isEmpty() || title.isEmpty() || element.select("a[href^=http]").size() != 0;
             });
 
-            offers_text = offers.select(".title a");
-            offers_thumb = offers.select("ul > li:first-of-type");
-            offers_price = offers.select(".price");
+            offers_titles = offers.select(".title a");
+            offers_thumbs = offers.select("ul > li:first-of-type");
+            offers_prices = offers.select(".price");
 
             getImageSources();
+            getOffersLinks();
 
             for(int i = 0; i < offers.size(); i++) {
                 searchResult.add(new Item(
-                        StringEscapeUtils.escapeJava(offers_text.get(i).text()),
+                        StringEscapeUtils.escapeJava(offers_titles.get(i).text()),
                         img_sources.get(i),
-                        offers_price.get(i).text()
+                        offers_prices.get(i).text(),
+                        links.get(i)
                 ));
             }
             return searchResult;
@@ -57,15 +57,21 @@ public class SprzedajemySearcher implements Searcher {
     private void getImageSources() {
         img_sources.clear();
 
-        for(Element elt: offers_thumb) {
-            if(elt.select("img").attr("src") != null) {
+        for(Element elt: offers_thumbs) {
+            if (elt.select("img").attr("src") != null) {
                 img_sources.add(elt.select("img").attr("src"));
-            }
-            else {
-                img_sources.add("No photo");
+            } else {
+                img_sources.add("http://www.domkata.com/no_photo.png");
             }
         }
+    }
 
+    private void getOffersLinks() {
+        links.clear();
+
+        for(Element item: offers_titles) {
+            links.add(item.attr("href"));
+        }
     }
 
 }

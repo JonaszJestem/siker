@@ -13,30 +13,31 @@ import java.util.List;
 
 @Component("olxSearcher")
 public class OlxSearcher implements Searcher {
-    private Elements offers_text;
-    private Elements offers_thumb;
-    private Elements offers_price;
-    private Document document;
+    private Elements offers_titles, offers_thumbs, offers_prices, offers_links;
     private final List<String> img_sources = new ArrayList<>();
+    private final List<String> links = new ArrayList<>();
 
     @Override
     public List<Item> search(String query) {
         List<Item> searchResult = new ArrayList<>();
         try {
             String url = "https://www.olx.pl/oferty/q-";
-            document = Jsoup.connect(url + query).get();
+            Document document = Jsoup.connect(url + query).get();
 
-            offers_text = document.select("div.space.rel a strong");
-            offers_thumb = document.select(".thumb");
-            offers_price = document.select(".wwnormal.tright.td-price");
+            offers_titles = document.select("div.space.rel a strong");
+            offers_thumbs = document.select(".thumb");
+            offers_prices = document.select(".wwnormal.tright.td-price");
+            offers_links = document.select("div.space.rel a");
 
+            getOffersLinks();
             getImageSources();
 
-            for(int i = 0; i < offers_text.size(); i++) {
+            for(int i = 0; i < offers_titles.size(); i++) {
                 searchResult.add(new Item(
-                        StringEscapeUtils.escapeJava(offers_text.get(i).text()),
+                        StringEscapeUtils.escapeJava(offers_titles.get(i).text()),
                         img_sources.get(i),
-                        offers_price.get(i).text()
+                        offers_prices.get(i).text(),
+                        links.get(i)
                 ));
             }
 
@@ -50,15 +51,21 @@ public class OlxSearcher implements Searcher {
     private void getImageSources() {
         img_sources.clear();
 
-        for(Element img: offers_thumb) {
+        for(Element img: offers_thumbs) {
             if(img.hasClass("nophoto")) {
-                img_sources.add("No photo");
+                img_sources.add("http://www.domkata.com/no_photo.png");
             }
             else {
                 img_sources.add(img.select("img").attr("src"));
             }
         }
-
     }
 
+    private void getOffersLinks() {
+        links.clear();
+
+        for(Element item: offers_links) {
+            links.add(item.attr("href"));
+        }
+    }
 }
