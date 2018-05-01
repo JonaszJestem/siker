@@ -65,7 +65,11 @@ public class OlxSearcher implements Searcher {
         links.clear();
 
         for(Element item: offers_links) {
-            links.add(item.attr("href"));
+            String href = item.attr("href");
+            if(href.equalsIgnoreCase("#"))
+                continue;
+
+            links.add(href);
         }
     }
 }

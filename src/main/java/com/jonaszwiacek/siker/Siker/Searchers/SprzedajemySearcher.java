@@ -70,7 +70,7 @@ public class SprzedajemySearcher implements Searcher {
         links.clear();
 
         for(Element item: offers_titles) {
-            links.add(item.attr("href"));
+            links.add("sprzedajemy.pl/" + item.attr("href"));
         }
     }
 
