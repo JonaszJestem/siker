@@ -1,5 +1,6 @@
 package com.jonaszwiacek.siker.SpringSiker.Controllers;
 
+import com.jonaszwiacek.siker.Siker.Searchers.AllegroSearcher;
 import com.jonaszwiacek.siker.Siker.Searchers.Item;
 import com.jonaszwiacek.siker.Siker.Searchers.OlxSearcher;
 import com.jonaszwiacek.siker.Siker.Searchers.SprzedajemySearcher;
@@ -23,6 +24,8 @@ public class SikerController {
     private OlxSearcher olxSearcher;
     @Autowired
     private SprzedajemySearcher sprzedajemySearcher;
+    @Autowired
+    private AllegroSearcher allegroSearcher;
 
     @Autowired
     public SikerController(Siker siker) {
@@ -47,6 +50,9 @@ public class SikerController {
         }
         if(searchers.contains("sprzedajemy")) {
             siker.addSearcher(sprzedajemySearcher);
+        }
+        if(searchers.contains("allegro")) {
+            siker.addSearcher(allegroSearcher);
         }
 
         return siker.toJson(siker.search(query));
