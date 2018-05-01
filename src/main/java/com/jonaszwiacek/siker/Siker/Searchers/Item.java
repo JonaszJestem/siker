@@ -49,7 +49,7 @@ public class Item {
         return "{" +
                 " \"title\": \"" + title + "\", " +
                 " \"price\": \"" + price + "\", " +
-                " \"img\": \"" + imageSource + "\"" +
+                " \"img\": \"" + imageSource + "\", " +
                 " \"link\": \"" + link + "\"" +
                 "}";
     }
