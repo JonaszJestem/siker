@@ -50,6 +50,7 @@ public class Item {
                 " \"title\": \"" + title + "\", " +
                 " \"price\": \"" + price + "\", " +
                 " \"img\": \"" + imageSource + "\"" +
+                " \"link\": \"" + link + "\"" +
                 "}";
     }
 }
