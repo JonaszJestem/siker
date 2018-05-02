@@ -2,10 +2,8 @@ import com.jonaszwiacek.siker.Siker.*;
 import com.jonaszwiacek.siker.Siker.Searchers.Item;
 import com.jonaszwiacek.siker.Siker.Searchers.SprzedajemySearcher;
 import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import static org.junit.Assert.assertFalse;
 
 public class SprzedajemySearcherTest {

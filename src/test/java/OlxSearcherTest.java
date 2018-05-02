@@ -16,9 +16,15 @@ public class OlxSearcherTest {
 
         ArrayList<String> searchPhrases = new ArrayList<>(Arrays.asList("komputer","czesci", "telefon", "samochod", "telewizor", "ksiazka"));
 
-        for(int i = 0; i < 1; i++) {
+        long avg_time = 0;
+        for(int i = 0; i < 100; i++) {
+            long start = System.currentTimeMillis();
             ArrayList<Item> items = new ArrayList<>(siker.search(searchPhrases.get(i%searchPhrases.size())));
+            long end = System.currentTimeMillis();
+            System.out.println("DEBUG: Logic A took " + (end - start) + " MilliSeconds");
+            avg_time+= end - start;
             assertFalse(items.isEmpty());
         }
+        System.out.println("AVG: " + avg_time/100);
     }
 }

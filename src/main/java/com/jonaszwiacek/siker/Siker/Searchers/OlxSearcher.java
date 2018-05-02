@@ -13,7 +13,8 @@ import java.util.List;
 
 @Component("olxSearcher")
 public class OlxSearcher implements Searcher {
-    private Elements offers_titles, offers_thumbs, offers_prices, offers_links;
+    private Elements offers_titles, offers_thumbs, offers_prices;
+    private Document document;
     private final List<String> img_sources = new ArrayList<>();
     private final List<String> links = new ArrayList<>();
 
@@ -21,26 +22,32 @@ public class OlxSearcher implements Searcher {
     public List<Item> search(String query) {
         List<Item> searchResult = new ArrayList<>();
         try {
-            String url = "https://www.olx.pl/oferty/q-";
-            Document document = Jsoup.connect(url + query).get();
+            String urlFormat = "https://www.olx.pl/oferty/q-%s/?page=%s";
+            int page = 1;
+            while(true) {
+                document = Jsoup.connect(String.format(urlFormat,query,page)).get();
+                if(!document.location().equals(String.format(urlFormat, StringEscapeUtils.escapeHtml4(query), page)) && page != 1) break;
 
-            offers_titles = document.select("div.space.rel a strong");
-            offers_thumbs = document.select(".thumb");
-            offers_prices = document.select(".wwnormal.tright.td-price");
-            offers_links = document.select("div.space.rel a");
 
-            getOffersLinks();
-            getImageSources();
+                Elements offers = document.select("#body-container > div:nth-child(3) > div > div.rel.listHandler > table > tbody > tr > td > table > tbody > tr:nth-child(1)");
 
-            for(int i = 0; i < offers_titles.size(); i++) {
-                searchResult.add(new Item(
-                        StringEscapeUtils.escapeJava(offers_titles.get(i).text()),
-                        img_sources.get(i),
-                        offers_prices.get(i).text(),
-                        links.get(i)
-                ));
+                offers_titles = offers.select("td:nth-child(2) > div > h3 > a");
+                offers_thumbs = offers.select("tr:nth-child(1) > td:nth-child(1) > a.thumb");
+                offers_prices = offers.select("td.wwnormal.tright.td-price");
+
+                getOffersLinks();
+                getImageSources();
+
+                for (int i = 0; i < offers_titles.size(); i++) {
+                    searchResult.add(new Item(
+                            StringEscapeUtils.escapeJava(offers_titles.get(i).text()),
+                            img_sources.get(i),
+                            offers_prices.get(i).text(),
+                            links.get(i)
+                    ));
+                }
+                page++;
             }
-
             return searchResult;
         } catch (IOException e) {
             e.printStackTrace();
@@ -64,7 +71,7 @@ public class OlxSearcher implements Searcher {
     private void getOffersLinks() {
         links.clear();
 
-        for(Element item: offers_links) {
+        for(Element item: offers_titles) {
             String href = item.attr("href");
             if(href.equalsIgnoreCase("#"))
                 continue;

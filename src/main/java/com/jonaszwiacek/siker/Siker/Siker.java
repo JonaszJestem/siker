@@ -18,10 +18,8 @@ public class Siker {
 
     public List<Item> search(String query) {
         this.items.clear();
-        System.out.println(items.size());
         for(Searcher searcher: searcherList) {
             items.addAll(searcher.search(query));
-            System.out.println(items.size());
         }
         return items;
     }

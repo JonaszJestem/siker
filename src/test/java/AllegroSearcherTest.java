@@ -20,7 +20,7 @@ public class AllegroSearcherTest {
         for(int i = 0; i < 1; i++) {
             ArrayList<Item> items = new ArrayList<>(siker.search(searchPhrases.get(i%searchPhrases.size())));
             //items.forEach(item -> System.out.println(item.getTitle()));
-            //System.out.println(items.size());
+            System.out.println(items.size());
             assertFalse(items.isEmpty());
         }
     }
