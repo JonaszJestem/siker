@@ -39,7 +39,7 @@ public class AllegroSearcher implements Searcher {
                             links.get(i)
                     ));
                 }
-                
+
             return searchResult;
         } catch (IOException e) {
             e.printStackTrace();
