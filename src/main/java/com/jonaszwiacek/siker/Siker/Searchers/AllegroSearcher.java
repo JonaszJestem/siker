@@ -20,36 +20,29 @@ public class AllegroSearcher implements Searcher {
     @Override
     public List<Item> search(String query) {
         List<Item> searchResult = new ArrayList<>();
-        String urlFormat = "https://allegro.pl/listing?string=%s&p=%s";
-        int page = 1;
+        String urlFormat = "https://allegro.pl/listing?string=%s&p=0";
 
-        for(int tries = 0; tries < 3; tries++) {
-            try {
-                while (true) {
-                    Document document = Jsoup.connect(String.format(urlFormat, query, page)).get();
+        try {
+                Document document = Jsoup.connect(String.format(urlFormat, query)).get();
 
-                    offers_titles = document.select("section article h2._342830a a");
-                    offers_thumbs = document.select("section img");
-                    if (offers_titles.isEmpty()) break;
+                offers_titles = document.select("section article h2._342830a a");
+                offers_thumbs = document.select("section img");
 
-                    getOffersLinks();
-                    getImageSources();
+                getOffersLinks();
+                getImageSources();
 
-                    for (int i = 0; i < offers_titles.size(); i++) {
-                        searchResult.add(new Item(
-                                StringEscapeUtils.escapeJava(offers_titles.get(i).text()),
-                                img_sources.get(i),
-                                "",
-                                links.get(i)
-                        ));
-                    }
-                    System.out.println(document.location());
-                    page++;
+                for (int i = 0; i < offers_titles.size(); i++) {
+                    searchResult.add(new Item(
+                            StringEscapeUtils.escapeJava(offers_titles.get(i).text()),
+                            img_sources.get(i),
+                            "",
+                            links.get(i)
+                    ));
                 }
-                return searchResult;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                
+            return searchResult;
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return searchResult;
     }

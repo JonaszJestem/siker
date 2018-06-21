@@ -17,7 +17,7 @@ public class SikerTest {
         siker.addSearcher(new OlxSearcher());
         siker.addSearcher(new SprzedajemySearcher());
 
-        for(int i = 0; i < 1; i++) {
+        for(int i = 0; i < 100; i++) {
             ArrayList<Item> items = new ArrayList<>(siker.search(searchPhrases.get(i%searchPhrases.size())));
             assertFalse(items.isEmpty());
         }

@@ -23,37 +23,32 @@ public class SprzedajemySearcher implements Searcher {
         List<Item> searchResult = new ArrayList<>();
 
         try {
-            String urlFormat = "https://sprzedajemy.pl/szukaj?inp_text=%s&items_per_page=60&offset=%s";
-            int offset = 0;
+            String urlFormat = "https://sprzedajemy.pl/szukaj?inp_text=%s&items_per_page=60&offset=0";
 
-            while(document.select("div.infoEmptyList").isEmpty()) {
-                document = Jsoup.connect(String.format(urlFormat,query,offset)).get();
-                Elements offers = document.select(".element");
+            document = Jsoup.connect(String.format(urlFormat,query)).get();
+            Elements offers = document.select(".element");
 
-                // Remove advertisements as they don't usually have price.
-                offers.removeIf(element -> {
-                    String price = element.select(".price").text();
-                    String title = element.select(".title a").text();
-                    return price.isEmpty() || title.isEmpty() || element.select("a[href^=http]").size() != 0;
-                });
+            // Remove advertisements as they don't usually have price.
+            offers.removeIf(element -> {
+                String price = element.select(".price").text();
+                String title = element.select(".title a").text();
+                return price.isEmpty() || title.isEmpty() || element.select("a[href^=http]").size() != 0;
+            });
 
-                offers_titles = offers.select(".title a");
-                offers_thumbs = offers.select("ul > li:first-of-type");
-                offers_prices = offers.select(".price");
+            offers_titles = offers.select(".title a");
+            offers_thumbs = offers.select("ul > li:first-of-type");
+            offers_prices = offers.select(".price");
 
-                getImageSources();
-                getOffersLinks();
+            getImageSources();
+            getOffersLinks();
 
-                for(int i = 0; i < offers.size(); i++) {
-                    searchResult.add(new Item(
-                            StringEscapeUtils.escapeJava(offers_titles.get(i).text()),
-                            img_sources.get(i),
-                            offers_prices.get(i).text(),
-                            links.get(i)
-                    ));
-                }
-
-                offset+=60;
+            for(int i = 0; i < offers.size(); i++) {
+                searchResult.add(new Item(
+                        StringEscapeUtils.escapeJava(offers_titles.get(i).text()),
+                        img_sources.get(i),
+                        offers_prices.get(i).text(),
+                        links.get(i)
+                ));
             }
 
             return searchResult;
