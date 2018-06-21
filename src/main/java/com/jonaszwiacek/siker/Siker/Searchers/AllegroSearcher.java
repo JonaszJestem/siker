@@ -20,7 +20,7 @@ public class AllegroSearcher implements Searcher {
     @Override
     public List<Item> search(String query) {
         List<Item> searchResult = new ArrayList<>();
-        String urlFormat = "https://allegro.pl/listing?string=%s&p=0";
+        String urlFormat = "https://allegro.pl/listing?string=%s";
 
         try {
                 Document document = Jsoup.connect(String.format(urlFormat, query)).get();

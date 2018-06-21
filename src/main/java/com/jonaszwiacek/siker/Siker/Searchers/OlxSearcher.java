@@ -22,11 +22,8 @@ public class OlxSearcher implements Searcher {
     public List<Item> search(String query) {
         List<Item> searchResult = new ArrayList<>();
         try {
-            String urlFormat = "https://www.olx.pl/oferty/q-%s/?page=%s";
-            int page = 1;
-            while(true) {
-                document = Jsoup.connect(String.format(urlFormat,query,page)).get();
-                if(!document.location().equals(String.format(urlFormat, StringEscapeUtils.escapeHtml4(query), page)) && page != 1) break;
+            String urlFormat = "https://www.olx.pl/oferty/q-%s";
+                document = Jsoup.connect(String.format(urlFormat,query)).get();
 
 
                 Elements offers = document.select("#body-container > div:nth-child(3) > div > div.rel.listHandler > table > tbody > tr > td > table > tbody > tr:nth-child(1)");
@@ -46,8 +43,6 @@ public class OlxSearcher implements Searcher {
                             links.get(i)
                     ));
                 }
-                page++;
-            }
             return searchResult;
         } catch (IOException e) {
             e.printStackTrace();

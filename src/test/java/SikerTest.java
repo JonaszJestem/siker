@@ -1,3 +1,4 @@
+import com.jonaszwiacek.siker.Siker.Searchers.AllegroSearcher;
 import com.jonaszwiacek.siker.Siker.Searchers.Item;
 import com.jonaszwiacek.siker.Siker.Searchers.OlxSearcher;
 import com.jonaszwiacek.siker.Siker.Searchers.SprzedajemySearcher;
@@ -15,9 +16,24 @@ public class SikerTest {
         ArrayList<String> searchPhrases = new ArrayList<>(Arrays.asList("komputer","czesci", "telefon", "samochod", "telewizor", "ksiazka"));
         Siker siker = new Siker();
         siker.addSearcher(new OlxSearcher());
+
+        for(int i = 0; i < 10; i++) {
+            ArrayList<Item> items = new ArrayList<>(siker.search(searchPhrases.get(i%searchPhrases.size())));
+            assertFalse(items.isEmpty());
+        }
+
+        siker = new Siker();
         siker.addSearcher(new SprzedajemySearcher());
 
-        for(int i = 0; i < 100; i++) {
+        for(int i = 0; i < 10; i++) {
+            ArrayList<Item> items = new ArrayList<>(siker.search(searchPhrases.get(i%searchPhrases.size())));
+            assertFalse(items.isEmpty());
+        }
+
+        siker = new Siker();
+        siker.addSearcher(new AllegroSearcher());
+
+        for(int i = 0; i < 10; i++) {
             ArrayList<Item> items = new ArrayList<>(siker.search(searchPhrases.get(i%searchPhrases.size())));
             assertFalse(items.isEmpty());
         }
