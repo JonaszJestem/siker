@@ -1,6 +1,7 @@
 package com.jonaszwiacek.siker.SpringSiker.Controllers;
 
 import com.jonaszwiacek.siker.Siker.Searchers.*;
+import com.jonaszwiacek.siker.Siker.Sorter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +45,6 @@ public class SikerController {
             siker.addSearcher(allegroSearcher);
         }
 
-        return siker.toJson(siker.search(query));
+        return siker.toJson(siker.search(query, Sorter.NONE));
     }
 }

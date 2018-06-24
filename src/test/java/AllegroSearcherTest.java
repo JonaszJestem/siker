@@ -65,4 +65,15 @@ public class AllegroSearcherTest {
             maxPrice = itemPrice;
         }
     }
+
+    @Test
+    public void shouldSearchThroughPages() {
+        Siker siker = new Siker();
+        siker.addSearcher(new AllegroSearcher());
+        for(int i=0; i < 10; i++) {
+            List<Item> items = new ArrayList<>(siker.search("komputer", Sorter.NONE, i));
+
+            assertFalse(items.isEmpty());
+        }
+    }
 }

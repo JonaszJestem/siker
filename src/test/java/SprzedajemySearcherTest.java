@@ -40,7 +40,7 @@ public class SprzedajemySearcherTest {
 
         int maxPrice = 0;
         for(Item i: items) {
-            int itemPrice = Integer.parseInt(i.getPrice().replaceAll("[^\\d.]", ""));
+            int itemPrice = Integer.parseInt(i.getPrice().replaceAll("[^\\d]", ""));
             assertTrue(itemPrice >= maxPrice);
             maxPrice = itemPrice;
         }
@@ -55,11 +55,23 @@ public class SprzedajemySearcherTest {
 
         assertFalse(items.isEmpty());
 
-        int maxPrice = Integer.parseInt(items.get(0).getPrice().replaceAll("[^\\d.]", ""));
+        int maxPrice = Integer.parseInt(items.get(0).getPrice().replaceAll("[^\\d]", ""));
         for(Item i: items) {
-            int itemPrice = Integer.parseInt(i.getPrice().replaceAll("[^\\d.]", ""));
+            int itemPrice = Integer.parseInt(i.getPrice().replaceAll("[^\\d]", ""));
             assertTrue(itemPrice <= maxPrice);
             maxPrice = itemPrice;
+        }
+    }
+
+
+    @Test
+    public void shouldSearchThroughPages() {
+        Siker siker = new Siker();
+        siker.addSearcher(new SprzedajemySearcher());
+        for(int i=0; i < 10; i++) {
+            List<Item> items = new ArrayList<>(siker.search("komputer", Sorter.NONE, i));
+
+            assertFalse(items.isEmpty());
         }
     }
 }

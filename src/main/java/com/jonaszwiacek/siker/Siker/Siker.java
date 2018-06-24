@@ -15,18 +15,30 @@ public class Siker {
         searcherList.add(searcher);
     }
 
-    public List<Item> search(String query) {
-        this.items.clear();
-        for(Searcher searcher: searcherList) {
-            items.addAll(searcher.search(query));
-        }
-        return items;
-    }
-
     public List<Item> search(String query, Sorter sorter) {
         this.items.clear();
         for(Searcher searcher: searcherList) {
             items.addAll(searcher.search(query, sorter));
+        }
+        if(sorter == Sorter.PRICE_ASC) {
+            items.sort(Comparator.comparing(i -> Integer.parseInt(
+                    i.getPrice()
+                            .replaceAll("[^\\d.]", "")
+            )));
+        }
+        else if(sorter == Sorter.PRICE_DESC) {
+            items.sort(Comparator.comparing(i -> Integer.parseInt(
+                    i.getPrice()
+                            .replaceAll("[^\\d.]", "")
+            ), Comparator.reverseOrder()));
+        }
+        return items;
+    }
+
+    public List<Item> search(String query, Sorter sorter, int page) {
+        this.items.clear();
+        for(Searcher searcher: searcherList) {
+            items.addAll(searcher.search(query, sorter, page));
         }
         if(sorter == Sorter.PRICE_ASC) {
             items.sort(Comparator.comparing(i -> Integer.parseInt(

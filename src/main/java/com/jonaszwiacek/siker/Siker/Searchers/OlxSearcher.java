@@ -58,6 +58,11 @@ public class OlxSearcher implements Searcher {
     }
 
     @Override
+    public List<Item> search(String query, Sorter sorter, int page) {
+        return null;
+    }
+
+    @Override
     public List<Item> search(String query, Sorter sorter) {
         String urlFormat = "https://www.olx.pl/oferty/q-%s/?search[order]=%s";
         List<Item> result = new ArrayList<>();
@@ -76,7 +81,7 @@ public class OlxSearcher implements Searcher {
                 result = search(String.format(urlFormat, query, "filter_float_price,desc"));
                 result.sort(Comparator.comparing(i -> Integer.parseInt(
                         i.getPrice()
-                                .replaceAll("[^\\d.]", "")
+                                .replaceAll("[^\\d]", "")
                 ), Comparator.reverseOrder()));
                 break;
             case NEWEST:

@@ -49,8 +49,33 @@ public class AllegroSearcher implements Searcher {
     }
 
     @Override
+    public List<Item> search(String query, Sorter sorter, int page) {
+        page++;
+        String urlFormat = "https://allegro.pl/listing?string=%s&order=%s&p=%d";
+        List<Item> result = new ArrayList<>();
+
+        switch(sorter) {
+            case NONE:
+                return search(String.format(urlFormat, query, "", page));
+            case PRICE_ASC:
+                result = search(String.format(urlFormat, query, "p", page));
+                break;
+            case PRICE_DESC:
+                result = search(String.format(urlFormat, query, "pd", page));
+                break;
+            case NEWEST:
+                return search(String.format(urlFormat, query, "n", page));
+            case OLDEST:
+                return search(String.format(urlFormat, query, "t", page));
+            case ACC:
+                return search(String.format(urlFormat, query, "m", page));
+        }
+        return result;
+    }
+
+    @Override
     public List<Item> search(String query, Sorter sorter) {
-        String urlFormat = "https://allegro.pl/listing?string=%s&order=%s";
+        String urlFormat = "https://allegro.pl/listing?string=%s&order=m";
         List<Item> result = new ArrayList<>();
 
         switch(sorter) {

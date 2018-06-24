@@ -41,7 +41,7 @@ public class SikerTest {
 
         int maxPrice = 0;
         for(Item i: items) {
-            int itemPrice = Integer.parseInt(i.getPrice().replaceAll("[^\\d.]", ""));
+            int itemPrice = Integer.parseInt(i.getPrice().replaceAll("[^\\d]", ""));
             assertTrue(itemPrice >= maxPrice);
             maxPrice = itemPrice;
         }
@@ -57,9 +57,9 @@ public class SikerTest {
 
         assertFalse(items.isEmpty());
 
-        int maxPrice = Integer.parseInt(items.get(0).getPrice().replaceAll("[^\\d.]", ""));
+        int maxPrice = Integer.parseInt(items.get(0).getPrice().replaceAll("[^\\d]", ""));
         for(Item i: items) {
-            int itemPrice = Integer.parseInt(i.getPrice().replaceAll("[^\\d.]", ""));
+            int itemPrice = Integer.parseInt(i.getPrice().replaceAll("[^\\d]", ""));
             assertTrue(itemPrice <= maxPrice);
             maxPrice = itemPrice;
         }

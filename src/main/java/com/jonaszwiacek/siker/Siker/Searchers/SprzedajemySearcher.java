@@ -58,6 +58,35 @@ public class SprzedajemySearcher implements Searcher {
     }
 
     @Override
+    public List<Item> search(String query, Sorter sorter, int page) {
+        String urlFormat = "https://sprzedajemy.pl/szukaj?inp_text=%s&items_per_page=60&sort=%s&offset=%d";
+        List<Item> result = new ArrayList<>();
+        switch(sorter) {
+            case NONE:
+                return search(String.format(urlFormat, query, "", page*60));
+            case PRICE_ASC:
+                result = search(String.format(urlFormat, query, "inp_srt_price_a", page*60));
+                result.sort(Comparator.comparing(i -> Integer.parseInt(
+                        i.getPrice()
+                                .replaceAll("[^\\d]", "")
+                )));
+            case PRICE_DESC:
+                result = search(String.format(urlFormat, query, "inp_srt_price_d", page*60));
+                result.sort(Comparator.comparing(i -> Integer.parseInt(
+                        i.getPrice()
+                                .replaceAll("[^\\d]", "")
+                ), Comparator.reverseOrder()));
+            case NEWEST:
+                return search(String.format(urlFormat, query, "inp_srt_date_d", page*60));
+            case OLDEST:
+                return search(String.format(urlFormat, query, "inp_srt_date_a", page*60));
+            case ACC:
+                return search(String.format(urlFormat, query, "inp_srt_score_d", page*60));
+        }
+        return result;
+    }
+
+    @Override
     public List<Item> search(String query, Sorter sorter) {
         String urlFormat = "https://sprzedajemy.pl/szukaj?inp_text=%s&items_per_page=60&sort=%s&offset=0";
         List<Item> result = new ArrayList<>();
@@ -68,16 +97,14 @@ public class SprzedajemySearcher implements Searcher {
                  result = search(String.format(urlFormat, query, "inp_srt_price_a"));
                  result.sort(Comparator.comparing(i -> Integer.parseInt(
                                                         i.getPrice()
-                                                                .replaceAll("[^\\d.]", "")
+                                                                .replaceAll("[^\\d]", "")
                                                         )));
-                 break;
             case PRICE_DESC:
                 result = search(String.format(urlFormat, query, "inp_srt_price_d"));
                 result.sort(Comparator.comparing(i -> Integer.parseInt(
                         i.getPrice()
-                                .replaceAll("[^\\d.]", "")
+                                .replaceAll("[^\\d]", "")
                 ), Comparator.reverseOrder()));
-                break;
             case NEWEST:
                 return search(String.format(urlFormat, query, "inp_srt_date_d"));
             case OLDEST:

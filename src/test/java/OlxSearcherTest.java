@@ -1,3 +1,4 @@
+import com.jonaszwiacek.siker.Siker.Searchers.AllegroSearcher;
 import com.jonaszwiacek.siker.Siker.Searchers.Item;
 import com.jonaszwiacek.siker.Siker.Searchers.OlxSearcher;
 import org.junit.Test;
@@ -59,6 +60,17 @@ public class OlxSearcherTest {
             int itemPrice = Integer.parseInt(i.getPrice().replaceAll("[^\\d.]", ""));
             assertTrue(itemPrice <= maxPrice);
             maxPrice = itemPrice;
+        }
+    }
+
+    @Test
+    public void shouldSearchThroughPages() {
+        Siker siker = new Siker();
+        siker.addSearcher(new OlxSearcher());
+        for(int i=0; i < 10; i++) {
+            List<Item> items = new ArrayList<>(siker.search("komputer", Sorter.NONE, i));
+
+            assertFalse(items.isEmpty());
         }
     }
 }
