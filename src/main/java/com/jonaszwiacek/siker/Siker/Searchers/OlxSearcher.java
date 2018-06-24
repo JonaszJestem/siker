@@ -1,5 +1,6 @@
 package com.jonaszwiacek.siker.Siker.Searchers;
 
+import com.jonaszwiacek.siker.Siker.Sorter;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Component("olxSearcher")
@@ -22,32 +24,67 @@ public class OlxSearcher implements Searcher {
     public List<Item> search(String query) {
         List<Item> searchResult = new ArrayList<>();
         try {
-            String urlFormat = "https://www.olx.pl/oferty/q-%s";
-                document = Jsoup.connect(String.format(urlFormat,query)).get();
+            document = Jsoup.connect(query).get();
+
+            Elements offers = document.select("#body-container > div:nth-child(3) > div > div.rel.listHandler > table > tbody > tr > td > table > tbody > tr:nth-child(1)");
+
+            // Remove advertisements as they don't usually have price.
+            offers.removeIf(element -> {
+                String price = element.select("td.wwnormal.tright.td-price").text();
+                return price.isEmpty();
+            });
 
 
-                Elements offers = document.select("#body-container > div:nth-child(3) > div > div.rel.listHandler > table > tbody > tr > td > table > tbody > tr:nth-child(1)");
+            offers_titles = offers.select("td:nth-child(2) > div > h3 > a");
+            offers_thumbs = offers.select("tr:nth-child(1) > td:nth-child(1) > a.thumb");
+            offers_prices = offers.select("td.wwnormal.tright.td-price");
 
-                offers_titles = offers.select("td:nth-child(2) > div > h3 > a");
-                offers_thumbs = offers.select("tr:nth-child(1) > td:nth-child(1) > a.thumb");
-                offers_prices = offers.select("td.wwnormal.tright.td-price");
+            getOffersLinks();
+            getImageSources();
 
-                getOffersLinks();
-                getImageSources();
-
-                for (int i = 0; i < offers_titles.size(); i++) {
-                    searchResult.add(new Item(
-                            StringEscapeUtils.escapeJava(offers_titles.get(i).text()),
-                            img_sources.get(i),
-                            offers_prices.get(i).text(),
-                            links.get(i)
-                    ));
-                }
+            for (int i = 0; i < offers_titles.size(); i++) {
+                searchResult.add(new Item(
+                        StringEscapeUtils.escapeJava(offers_titles.get(i).text()),
+                        img_sources.get(i),
+                        offers_prices.get(i).text(),
+                        links.get(i)
+                ));
+            }
             return searchResult;
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public List<Item> search(String query, Sorter sorter) {
+        String urlFormat = "https://www.olx.pl/oferty/q-%s/?search[order]=%s";
+        List<Item> result = new ArrayList<>();
+        switch(sorter) {
+            case NONE:
+            case ACC:
+                return search(String.format(urlFormat, query, ""));
+            case PRICE_ASC:
+                result = search(String.format(urlFormat, query, "filter_float_price,asc"));
+                result.sort(Comparator.comparing(i -> Integer.parseInt(
+                        i.getPrice()
+                                .replaceAll("[^\\d]", "")
+                )));
+                break;
+            case PRICE_DESC:
+                result = search(String.format(urlFormat, query, "filter_float_price,desc"));
+                result.sort(Comparator.comparing(i -> Integer.parseInt(
+                        i.getPrice()
+                                .replaceAll("[^\\d.]", "")
+                ), Comparator.reverseOrder()));
+                break;
+            case NEWEST:
+                return search(String.format(urlFormat, query, "created_at,desc"));
+            case OLDEST:
+                return search(String.format(urlFormat, query, "created_at,asc"));
+        }
+        return result;
     }
 
     private void getImageSources() {
@@ -70,7 +107,6 @@ public class OlxSearcher implements Searcher {
             String href = item.attr("href");
             if(href.equalsIgnoreCase("#"))
                 continue;
-
             links.add(href);
         }
     }

@@ -4,8 +4,7 @@ import com.jonaszwiacek.siker.Siker.Searchers.Item;
 import com.jonaszwiacek.siker.Siker.Searchers.Searcher;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Component("siker")
 public class Siker {
@@ -24,6 +23,26 @@ public class Siker {
         return items;
     }
 
+    public List<Item> search(String query, Sorter sorter) {
+        this.items.clear();
+        for(Searcher searcher: searcherList) {
+            items.addAll(searcher.search(query, sorter));
+        }
+        if(sorter == Sorter.PRICE_ASC) {
+            items.sort(Comparator.comparing(i -> Integer.parseInt(
+                    i.getPrice()
+                            .replaceAll("[^\\d.]", "")
+            )));
+        }
+        else if(sorter == Sorter.PRICE_DESC) {
+            items.sort(Comparator.comparing(i -> Integer.parseInt(
+                    i.getPrice()
+                            .replaceAll("[^\\d.]", "")
+            ), Comparator.reverseOrder()));
+        }
+        return items;
+    }
+
     public String toJson(List<Item> items) {
         StringBuilder sb = new StringBuilder();
         sb.append("{ \"offers\": [");
@@ -38,5 +57,9 @@ public class Siker {
 
     public void clearSearchers() {
         this.searcherList.clear();
+    }
+
+    public void addAll(Searcher[] searchers) {
+        searcherList.addAll(Arrays.asList(searchers));
     }
 }

@@ -1,9 +1,6 @@
 package com.jonaszwiacek.siker.SpringSiker.Controllers;
 
-import com.jonaszwiacek.siker.Siker.Searchers.AllegroSearcher;
-import com.jonaszwiacek.siker.Siker.Searchers.Item;
-import com.jonaszwiacek.siker.Siker.Searchers.OlxSearcher;
-import com.jonaszwiacek.siker.Siker.Searchers.SprzedajemySearcher;
+import com.jonaszwiacek.siker.Siker.Searchers.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,29 +17,21 @@ public class SikerController {
 
     private final Siker siker;
 
-    @Autowired
-    private OlxSearcher olxSearcher;
-    @Autowired
-    private SprzedajemySearcher sprzedajemySearcher;
-    @Autowired
-    private AllegroSearcher allegroSearcher;
+    private final Searcher olxSearcher, allegroSearcher, sprzedajemySearcher;
 
     @Autowired
-    public SikerController(Siker siker) {
+    public SikerController(Siker siker, OlxSearcher olxSearcher, Searcher allegroSearcher, Searcher sprzedajemySearcher) {
         this.siker = siker;
+        this.olxSearcher = olxSearcher;
+        this.allegroSearcher = allegroSearcher;
+        this.sprzedajemySearcher = sprzedajemySearcher;
     }
 
-    @SuppressWarnings("unchecked")
     @RequestMapping("/search")
     public String searchQuery(@RequestParam(value = "services") String services, @RequestParam(value = "query") String query) {
 
-        ArrayList searchers = new ArrayList<>();
-        if (services.contains(",")) {
-            searchers.addAll(Arrays.asList(services.split(",")));
-        }
-        else {
-            searchers.add(services);
-        }
+        ArrayList searchers = new ArrayList<>(Arrays.asList(services.split(",")));
+
         siker.clearSearchers();
 
         if(searchers.contains("olx")) {
