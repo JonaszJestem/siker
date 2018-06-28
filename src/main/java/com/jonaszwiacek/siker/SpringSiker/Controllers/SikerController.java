@@ -2,6 +2,7 @@ package com.jonaszwiacek.siker.SpringSiker.Controllers;
 
 import com.jonaszwiacek.siker.Siker.Searchers.*;
 import com.jonaszwiacek.siker.Siker.Sorter;
+import com.jonaszwiacek.siker.SpringSiker.Converters.SortingConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jonaszwiacek.siker.Siker.Siker;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -29,22 +31,28 @@ public class SikerController {
     }
 
     @RequestMapping("/search")
-    public String searchQuery(@RequestParam(value = "services") String services, @RequestParam(value = "query") String query) {
+    public String searchQuery(
+            @RequestParam String services,
+            @RequestParam String query,
+            @RequestParam(defaultValue = "NONE") String sorting,
+            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "-1") String category) {
 
-        ArrayList searchers = new ArrayList<>(Arrays.asList(services.split(",")));
+        List<String> searchers = new ArrayList<>(Arrays.asList(services.split(",")));
 
         siker.clearSearchers();
 
-        if(searchers.contains("olx")) {
-            siker.addSearcher(olxSearcher);
-        }
-        if(searchers.contains("sprzedajemy")) {
-            siker.addSearcher(sprzedajemySearcher);
-        }
-        if(searchers.contains("allegro")) {
-            siker.addSearcher(allegroSearcher);
+        for(String s: searchers) {
+            System.out.println(new SortingConverter().convert(sorting));
+            siker.addSearcher(
+                    SearchersFactory.createSearcher(SearchersEnum.valueOf(s.toUpperCase()))
+            );
         }
 
-        return siker.toJson(siker.search(query, Sorter.NONE));
+        return siker.toJson(siker.search(
+                query,
+                new SortingConverter().convert(sorting),
+                page
+        ));
     }
 }

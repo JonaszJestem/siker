@@ -59,7 +59,33 @@ public class OlxSearcher implements Searcher {
 
     @Override
     public List<Item> search(String query, Sorter sorter, int page) {
-        return null;
+        page++;
+        String urlFormat = "https://www.olx.pl/oferty/q-%s/?search[order]=%s&page=%s";
+        List<Item> result = new ArrayList<>();
+        switch(sorter) {
+            case NONE:
+            case ACC:
+                return search(String.format(urlFormat, query, "", page));
+            case PRICE_ASC:
+                result = search(String.format(urlFormat, query, "filter_float_price,asc", page));
+                result.sort(Comparator.comparing(i -> Integer.parseInt(
+                        i.getPrice()
+                                .replaceAll("[^\\d]", "")
+                )));
+                break;
+            case PRICE_DESC:
+                result = search(String.format(urlFormat, query, "filter_float_price,desc", page));
+                result.sort(Comparator.comparing(i -> Integer.parseInt(
+                        i.getPrice()
+                                .replaceAll("[^\\d]", "")
+                ), Comparator.reverseOrder()));
+                break;
+            case NEWEST:
+                return search(String.format(urlFormat, query, "created_at,desc", page));
+            case OLDEST:
+                return search(String.format(urlFormat, query, "created_at,asc", page));
+        }
+        return result;
     }
 
     @Override
