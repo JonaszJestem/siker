@@ -43,7 +43,6 @@ public class SikerController {
         siker.clearSearchers();
 
         for(String s: searchers) {
-            System.out.println(new SortingConverter().convert(sorting));
             siker.addSearcher(
                     SearchersFactory.createSearcher(SearchersEnum.valueOf(s.toUpperCase()))
             );

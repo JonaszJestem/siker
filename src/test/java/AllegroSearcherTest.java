@@ -76,4 +76,9 @@ public class AllegroSearcherTest {
             assertFalse(items.isEmpty());
         }
     }
+    @Test
+    public void shouldListOffersInJSON() {
+        AllegroSearcher allegroSearcher = new AllegroSearcher();
+        System.out.println(allegroSearcher.getItemsInJSON("komputer"));
+    }
 }

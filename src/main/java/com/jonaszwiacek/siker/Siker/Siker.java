@@ -5,6 +5,7 @@ import com.jonaszwiacek.siker.Siker.Searchers.Searcher;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 @Component("siker")
 public class Siker {
@@ -16,42 +17,49 @@ public class Siker {
     }
 
     public List<Item> search(String query, Sorter sorter) {
+        System.out.println("Searching query: " + query + " Using sorter: " + sorter);
         this.items.clear();
         for(Searcher searcher: searcherList) {
+            System.out.println("Searching using " + searcher);
             items.addAll(searcher.search(query, sorter));
+            System.out.println("Searching complete");
         }
         if(sorter == Sorter.PRICE_ASC) {
             items.sort(Comparator.comparing(i -> Integer.parseInt(
                     i.getPrice()
-                            .replaceAll("[^\\d.]", "")
+                            .replaceAll("[^\\d]", "")
             )));
         }
         else if(sorter == Sorter.PRICE_DESC) {
             items.sort(Comparator.comparing(i -> Integer.parseInt(
                     i.getPrice()
-                            .replaceAll("[^\\d.]", "")
+                            .replaceAll("[^\\d]", "")
             ), Comparator.reverseOrder()));
         }
         return items;
     }
 
     public List<Item> search(String query, Sorter sorter, int page) {
+        System.out.println("Searching query: " + query + " Using sorter: " + sorter);
         this.items.clear();
         for(Searcher searcher: searcherList) {
+            System.out.println("Searching using " + searcher);
             items.addAll(searcher.search(query, sorter, page));
+            System.out.println("Searching complete");
         }
         if(sorter == Sorter.PRICE_ASC) {
             items.sort(Comparator.comparing(i -> Integer.parseInt(
                     i.getPrice()
-                            .replaceAll("[^\\d.]", "")
+                            .replaceAll("[^\\d]", "")
             )));
         }
         else if(sorter == Sorter.PRICE_DESC) {
             items.sort(Comparator.comparing(i -> Integer.parseInt(
                     i.getPrice()
-                            .replaceAll("[^\\d.]", "")
+                            .replaceAll("[^\\d]", "")
             ), Comparator.reverseOrder()));
         }
+        System.out.println("Returning results of total " + items.size() + " items.");
         return items;
     }
 

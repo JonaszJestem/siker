@@ -5,12 +5,14 @@ public class Item {
     private String imageSource;
     private String price;
     private String link;
+    private String site;
 
-    public Item(String title, String imageSource, String price, String link) {
+    public Item(String title, String imageSource, String price, String link, String site) {
         this.title = title;
         this.imageSource = imageSource;
         this.price = price;
         this.link = link;
+        this.site = site;
     }
 
     public String getTitle() {
@@ -45,12 +47,22 @@ public class Item {
         this.link = link;
     }
 
+    public String getSite() {
+        return site;
+    }
+
+    public void setSite(String site) {
+        this.site = site;
+    }
+
     public String toJSON() {
         return "{" +
                 " \"title\": \"" + title + "\", " +
                 " \"price\": \"" + price + "\", " +
                 " \"img\": \"" + imageSource + "\", " +
-                " \"link\": \"" + link + "\"" +
+                " \"link\": \"" + link + "\", " +
+                " \"site\": \"" + site + "\"" +
                 "}";
+
     }
 }

@@ -47,8 +47,8 @@ public class OlxSearcher implements Searcher {
                         StringEscapeUtils.escapeJava(offers_titles.get(i).text()),
                         img_sources.get(i),
                         offers_prices.get(i).text(),
-                        links.get(i)
-                ));
+                        links.get(i),
+                        "olx"));
             }
             return searchResult;
         } catch (IOException e) {

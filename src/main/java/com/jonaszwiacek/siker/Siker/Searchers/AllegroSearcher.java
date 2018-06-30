@@ -3,14 +3,15 @@ package com.jonaszwiacek.siker.Siker.Searchers;
 import com.jonaszwiacek.siker.Siker.Sorter;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
+import org.json.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Component("allegroSearcher")
@@ -37,8 +38,8 @@ public class AllegroSearcher implements Searcher {
                         StringEscapeUtils.escapeJava(offers_titles.get(i).text()),
                         img_sources.get(i),
                         "",
-                        links.get(i)
-                ));
+                        links.get(i),
+                        "allegro"));
             }
 
             return searchResult;
@@ -112,5 +113,25 @@ public class AllegroSearcher implements Searcher {
         for (Element item : offers_titles) {
             links.add(item.attr("href"));
         }
+    }
+
+    public String getItemsInJSON(String query) {
+        try {
+            Document document = Jsoup.connect("https://allegro.pl/listing?string=" + query).get();
+            Elements scriptTags = document.getElementsByTag("script");
+
+            for (Element tag : scriptTags){
+                for (DataNode node : tag.dataNodes()) {
+                    if(node.toString().contains("window.__listing_Items")) {
+                        int start = node.toString().indexOf("{");
+                        int end = node.toString().indexOf("window.__listing_PopoverStoreState");
+                        JSONObject jsonObject = new JSONObject(node.getWholeData().substring(start,end));
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }
